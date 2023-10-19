@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
 
+admin.site.site_header = 'BurgerUz Dashboard'                    # default: "Django Administration"
+admin.site.index_title = 'Hi Admin!'                 # default: "Site administration"
+admin.site.site_title = 'BurgerUz' # default: "Django site admin"
+
 # Static settings
 from django.conf import settings
 from django.conf.urls.static import static
@@ -19,6 +23,8 @@ schema_view = get_schema_view(
 public=True,
     permission_classes=(permissions.AllowAny,),
 )
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
