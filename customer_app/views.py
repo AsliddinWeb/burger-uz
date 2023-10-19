@@ -1,22 +1,29 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+
+from rest_framework.decorators import action
 
 from .models import Customer
 from .serializers import CustomerSerializer, CustomerFullSerializer
 
-
-class CustomerGetView(APIView):
-    def post(self, request):
-        serializer = CustomerSerializer(data=request.data)
+class CreateCustomer(APIView):
+    def post(self, request, format=None):
+        serializer = CustomerFullSerializer(data=request.data)
         if serializer.is_valid():
-            phone_number = serializer.validated_data['phone_number']
-            security_code = serializer.validated_data['security_code']
-
-            queryset = Customer.objects.filter(phone_number=phone_number, security_code=security_code)
-            obj = queryset.first()
-            if obj is not None:
-                serialized_obj = CustomerFullSerializer(obj)
-                return Response(serialized_obj.data, status=status.HTTP_200_OK)
-            return Response({'status': 'User topilmadi!'}, status=status.HTTP_404_NOT_FOUND)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetCustomerByPhone(APIView):
+    def post(self, request, format=None):
+        phone_number = request.data.get('phone_number')
+        security_code = request.data.get('security_code')
+
+        try:
+            customer = Customer.objects.get(phone_number=phone_number, security_code=security_code)
+            serializer = CustomerFullSerializer(customer)
+            return Response(serializer.data)
+        except Customer.DoesNotExist:
+            return Response({"error": "Mijoz topilmadi."}, status=status.HTTP_404_NOT_FOUND)

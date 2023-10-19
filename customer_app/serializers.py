@@ -9,4 +9,5 @@ class CustomerSerializer(serializers.Serializer):
 class CustomerFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['name', 'tg_id', 'phone_number', 'delivery_address']
+        # fields = ['name', 'tg_id', 'phone_number', 'delivery_address']
+        fields = "__all__"

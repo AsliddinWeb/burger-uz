@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_yasg',
 
     # Local APPS
     'customer_app',
@@ -36,6 +37,19 @@ INSTALLED_APPS = [
     'order_app',
     'menu_app',
 ]
+
+
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization',
+        },
+    },
+    'USE_SESSION_AUTH': False,
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -51,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # 'drf_yasg.middleware.SwaggerMiddleware',
 ]
 
 ROOT_URLCONF = 'BURGER.urls'
